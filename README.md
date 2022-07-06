@@ -8,11 +8,16 @@
 2. Minecraft 1.18.x (Future version is testing)
 3. Java >= 17
 
+### Key bindings
+
+- `F10` Toggle HUD on / off
+- `Home` Open ClockHUD Config
+
 ### ScreenShot
-![day](https://s2.loli.net/2022/07/06/fqb2phIyjVDzE9L.png)
-![night](https://s2.loli.net/2022/07/06/WacXFfNRgVB5usp.png)
+![day](https://s2.loli.net/2022/07/07/23J4xQTuni1WpU9.png)
+![night](https://s2.loli.net/2022/07/07/7cVtisXrpEHTYfC.png)
 
 ### TODO
 - [ ] Future version support
-- [ ] Config Support
+- [x] Config Support
 - [ ] Show day count
