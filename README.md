@@ -5,8 +5,9 @@
 
 ### Requirements
 1. Fabric
-2. Minecraft 1.18.x (Future version is testing)
-3. Java >= 17
+2. [Cloth Config API (CurseForge)](https://www.curseforge.com/minecraft/mc-mods/cloth-config)  >= 6.2
+3. Minecraft 1.18.x (Future version is testing)
+4. Java >= 17
 
 ### Key bindings
 
