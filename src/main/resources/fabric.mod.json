@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "clock-hud",
+  "version": "${version}",
+
+  "name": "Clock HUD",
+  "description": "Display a clock in game",
+  "authors": [
+    "KawaiiZapic"
+  ],
+  "contact": {
+    "homepage": "https://i.zapic.moe/",
+    "sources": "https://github.com/KawaiiZapic/ClockHUD"
+  },
+
+  "license": "WTFPL",
+  "icon": "assets/clock-hud/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "moe.zapic.clockhud.ClockHUD"
+    ]
+  },
+  "mixins": [
+    "clock-hud.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.6",
+    "fabric": "*",
+    "minecraft": "~1.18",
+    "java": ">=17"
+  }
+}
