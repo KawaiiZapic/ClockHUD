@@ -1,7 +1,6 @@
 package moe.zapic.clockhud.mixin;
 
 import moe.zapic.clockhud.Utils;
-import net.minecraft.client.render.GameRenderer;
 import com.mojang.blaze3d.systems.RenderSystem;
 import moe.zapic.clockhud.Config;
 import moe.zapic.clockhud.Textures;
