@@ -1,3 +1,9 @@
 {
-  "key.clock-hud.toggle-clock": "Toggle clock show"
+  "key.clock-hud.toggle-clock": "Toggle clock show",
+  "key.clock-hud.open-config": "Open ClockHUD config",
+  "key.clock-hud.category": "ClockHUD",
+  "text.autoconfig.clock-hud.title": "ClockHUD Config",
+  "text.autoconfig.clock-hud.option.isShow": "Show clock bar",
+  "text.autoconfig.clock-hud.option.ScreenX": "X offset",
+  "text.autoconfig.clock-hud.option.ScreenY": "Y offset"
 }
