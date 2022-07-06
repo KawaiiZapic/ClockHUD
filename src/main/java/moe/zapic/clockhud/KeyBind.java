@@ -4,6 +4,7 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+import moe.zapic.clockhud.config.ConfigScreenBuilder;
 import moe.zapic.clockhud.config.ModConfig;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -36,7 +37,7 @@ public class KeyBind {
                 ClockHUD.config.isShow = !ClockHUD.config.isShow;
             }
             while (ShowConfigKeyBind.wasPressed()) {
-                MinecraftClient.getInstance().setScreen(AutoConfig.getConfigScreen(ModConfig.class, MinecraftClient.getInstance().currentScreen).get());
+                MinecraftClient.getInstance().setScreen(ConfigScreenBuilder.getConfigScreen());
             }
         });
     }

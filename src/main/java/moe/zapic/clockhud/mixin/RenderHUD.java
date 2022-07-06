@@ -21,7 +21,8 @@ public class RenderHUD {
 		if (!ClockHUD.config.isShow) { return; }
 		RenderSystem.enableBlend();
 		matrices.push();
-		matrices.scale(Textures.SCALE,Textures.SCALE,Textures.SCALE);
+		var RealScale = Textures.SCALE * (ClockHUD.config.Scale / 100f);
+		matrices.scale(RealScale,RealScale,RealScale);
 		RenderSystem.setShaderTexture(0, Textures.BAR);
 		var RealX = ClockHUD.config.ScreenX + (Textures.ICON_S - Textures.DOT_S) / 2;
 		var RealY = ClockHUD.config.ScreenY + (Textures.ICON_S - Textures.BAR_H) / 2 - 1;

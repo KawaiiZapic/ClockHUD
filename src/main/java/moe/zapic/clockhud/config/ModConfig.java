@@ -7,8 +7,9 @@ import me.shedaniel.autoconfig.annotation.Config;
 @Config(name = "clock-hud")
 public class ModConfig implements ConfigData {
     public boolean isShow = true;
-    public int ScreenX = 0;
-    public int ScreenY = 0;
+    public int ScreenX = 4;
+    public int ScreenY = 4;
+    public int Scale = 100;
 
 //    @ConfigEntry.Gui.Excluded
 //    public static int _ScreenW = 0;

@@ -2,7 +2,10 @@ package moe.zapic.clockhud;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
+import me.shedaniel.autoconfig.gui.registry.api.GuiProvider;
+import me.shedaniel.autoconfig.gui.registry.api.GuiRegistryAccess;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
+import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import moe.zapic.clockhud.config.ModConfig;
 import net.fabricmc.api.ClientModInitializer;
@@ -16,6 +19,9 @@ import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Field;
+import java.util.List;
+
 public class ClockHUD implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("ClockHUD");
 	public static ModConfig config = null;
@@ -25,6 +31,5 @@ public class ClockHUD implements ClientModInitializer {
 		KeyBind.bind();
 		AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
 		config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
-
 	}
 }

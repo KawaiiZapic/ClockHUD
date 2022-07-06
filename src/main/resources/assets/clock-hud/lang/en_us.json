@@ -5,5 +5,7 @@
   "text.autoconfig.clock-hud.title": "ClockHUD Config",
   "text.autoconfig.clock-hud.option.isShow": "Show clock bar",
   "text.autoconfig.clock-hud.option.ScreenX": "X offset",
-  "text.autoconfig.clock-hud.option.ScreenY": "Y offset"
+  "text.autoconfig.clock-hud.option.ScreenY": "Y offset",
+  "text.autoconfig.clock-hud.option.Scale": "HUD scale",
+  "text.autoconfig.clock-hud.option.ScalePercent": "%d%%"
 }
