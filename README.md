@@ -1,9 +1,18 @@
-# Fabric Example Mod
+# ClockHUD
+### A mod show a clock bar in your game
 
-## Setup
+*This is a reload version for [ClockHUD](https://github.com/samvbeckmann/ClockHUD), but work with fabric in high version and fully rewrite code.*
 
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
+### Requirements
+1. Fabric
+2. Minecraft 1.18.x (Future version is testing)
+3. Java >= 17
 
-## License
+### ScreenShot
+![day](https://s2.loli.net/2022/07/06/fqb2phIyjVDzE9L.png)
+![night](https://s2.loli.net/2022/07/06/WacXFfNRgVB5usp.png)
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+### TODO
+[ ] Future version support
+[ ] Config Support
+[ ] Show day count
