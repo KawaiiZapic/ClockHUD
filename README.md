@@ -13,6 +13,6 @@
 ![night](https://s2.loli.net/2022/07/06/WacXFfNRgVB5usp.png)
 
 ### TODO
-[ ] Future version support
-[ ] Config Support
-[ ] Show day count
+- [ ] Future version support
+- [ ] Config Support
+- [ ] Show day count
