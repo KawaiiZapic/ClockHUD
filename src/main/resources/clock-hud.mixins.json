@@ -6,7 +6,7 @@
   "mixins": [
   ],
   "client": [
-    "RenderHUD"
+    "RenderMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -31,5 +31,18 @@ public class ClockHUD implements ClientModInitializer {
 		KeyBind.bind();
 		AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
 		config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
+		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
+			@Override
+			public Identifier getFabricId() {
+				return Textures.BAR;
+			}
+			@Override
+			public void reload(ResourceManager manager) {
+				var TextureManager = MinecraftClient.getInstance().getTextureManager();
+				TextureManager.getTexture(Textures.BAR).setFilter(true, true);
+				TextureManager.getTexture(Textures.MOON).setFilter(true, true);
+				TextureManager.getTexture(Textures.SUN).setFilter(true, true);
+			}
+		});
 	}
 }
