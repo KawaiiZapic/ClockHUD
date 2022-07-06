@@ -9,19 +9,6 @@ public class ModConfig implements ConfigData {
     public boolean isShow = true;
     public int ScreenX = 4;
     public int ScreenY = 4;
+    @ConfigEntry.BoundedDiscrete(min = 25, max = 200)
     public int Scale = 100;
-
-//    @ConfigEntry.Gui.Excluded
-//    public static int _ScreenW = 0;
-//    @ConfigEntry.Gui.Excluded
-//    public static int _ScreenH = 0;
-
-//    public static void _initScreenSize() {
-//        var client = MinecraftClient.getInstance();
-//        if (client.currentScreen != null) {
-//            _ScreenW = client.currentScreen.width;
-//            _ScreenH = client.currentScreen.height;
-//        }
-//
-//    }
 }
