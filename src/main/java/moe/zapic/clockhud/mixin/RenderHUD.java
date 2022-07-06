@@ -19,6 +19,7 @@ public class RenderHUD {
 
 	@Inject(at = @At("TAIL"), method = "render")
 	public void renderClock(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+		if (!Config.KeyToggleShow) { return; }
 		matrices.scale(Textures.SCALE,Textures.SCALE,Textures.SCALE);
 		RenderSystem.setShaderTexture(0, Textures.BAR);
 		var RealX = Config.ScreenX + (Textures.ICON_S - Textures.DOT_S) / 2;
