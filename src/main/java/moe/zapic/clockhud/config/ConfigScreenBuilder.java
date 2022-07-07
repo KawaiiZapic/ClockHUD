@@ -46,6 +46,13 @@ public class ConfigScreenBuilder {
                 .build()
         );
         category.addEntry(entry
+                .startIntSlider(new TranslatableText("text.autoconfig.clock-hud.option.TipScale"), config.TipScale, 100, 200)
+                .setDefaultValue(150)
+                .setTextGetter(v -> new TranslatableText("text.autoconfig.clock-hud.option.ScalePercent", v))
+                .setSaveConsumer(v -> config.TipScale = v)
+                .build()
+        );
+        category.addEntry(entry
                 .startIntSlider(new TranslatableText("text.autoconfig.clock-hud.option.Opacity"), config.Opacity, 0, 255)
                 .setDefaultValue(255)
                 .setTextGetter(v -> new TranslatableText("text.autoconfig.clock-hud.option.ScalePercent", (int)(v/2.55f)))

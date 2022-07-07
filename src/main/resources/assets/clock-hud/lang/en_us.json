@@ -8,6 +8,8 @@
   "text.autoconfig.clock-hud.option.ScreenX": "X offset",
   "text.autoconfig.clock-hud.option.ScreenY": "Y offset",
   "text.autoconfig.clock-hud.option.Scale": "HUD scale",
+  "text.autoconfig.clock-hud.option.TipScale": "Day count tip scale",
+  "text.autoconfig.clock-hud.option.Opacity": "HUD opacity",
   "text.autoconfig.clock-hud.option.ScalePercent": "%d%%",
   "text.clock-hud.new-day-tip": "Day %d"
 }

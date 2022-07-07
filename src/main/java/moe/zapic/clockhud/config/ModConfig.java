@@ -13,6 +13,9 @@ public class ModConfig implements ConfigData {
     @ConfigEntry.BoundedDiscrete(min = 25, max = 200)
     public int Scale = 100;
 
+    @ConfigEntry.BoundedDiscrete(min = 100, max = 200)
+    public int TipScale = 150;
+
     @ConfigEntry.BoundedDiscrete(min = 0, max = 255)
     public int Opacity = 255;
 }
