@@ -15,6 +15,9 @@ public class ClockRender {
         if (!config.isShow) { return; }
 
         RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.disableDepthTest();
+        RenderSystem.setShaderColor(1.0f,1.0f,1.0f,config.Opacity / 255.0f);
         matrices.push();
 
         var RealScale = Textures.SCALE * (config.Scale / 100f);
@@ -28,6 +31,7 @@ public class ClockRender {
         drawTexture(matrices, Utils.isDay() ? Textures.SUN : Textures.MOON, IconX, config.ScreenY, Textures.ICON_S, Textures.ICON_S);
 
         matrices.pop();
+        RenderSystem.setShaderColor(1.0f,1.0f,1.0f,1.0f);
     }
 
     private static void drawTexture(MatrixStack matrices, Identifier texture, int x, int y, int w, int h) {

@@ -11,4 +11,7 @@ public class ModConfig implements ConfigData {
     public int ScreenY = 4;
     @ConfigEntry.BoundedDiscrete(min = 25, max = 200)
     public int Scale = 100;
+
+    @ConfigEntry.BoundedDiscrete(min = 0, max = 255)
+    public int Opacity = 255;
 }

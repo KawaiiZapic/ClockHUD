@@ -39,6 +39,13 @@ public class ConfigScreenBuilder {
                 .setSaveConsumer(v -> config.Scale = v)
                 .build()
         );
+        category.addEntry(entry
+                .startIntSlider(new TranslatableText("text.autoconfig.clock-hud.option.Opacity"), config.Opacity, 0, 255)
+                .setDefaultValue(255)
+                .setTextGetter(v -> new TranslatableText("text.autoconfig.clock-hud.option.ScalePercent", (int)(v/2.55f)))
+                .setSaveConsumer(v -> config.Opacity = v)
+                .build()
+        );
 
         return builder.build();
     }
