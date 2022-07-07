@@ -4,8 +4,10 @@
   "key.clock-hud.category": "ClockHUD",
   "text.autoconfig.clock-hud.title": "ClockHUD 设置",
   "text.autoconfig.clock-hud.option.isShow": "显示时钟",
+  "text.autoconfig.clock-hud.option.showDayCount": "在新的一天显示天数",
   "text.autoconfig.clock-hud.option.ScreenX": "X偏移",
   "text.autoconfig.clock-hud.option.ScreenY": "Y偏移",
   "text.autoconfig.clock-hud.option.Scale": "HUD大小缩放",
-  "text.autoconfig.clock-hud.option.ScalePercent": "%d%%"
+  "text.autoconfig.clock-hud.option.ScalePercent": "%d%%",
+  "text.clock-hud.new-day-tip": "第%d天"
 }

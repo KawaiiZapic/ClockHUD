@@ -46,6 +46,12 @@ public class ConfigScreenBuilder {
                 .setSaveConsumer(v -> config.Opacity = v)
                 .build()
         );
+        category.addEntry(entry
+                .startBooleanToggle(new TranslatableText("text.autoconfig.clock-hud.option.showDayCount"), config.showDayCount)
+                .setDefaultValue(true)
+                .setSaveConsumer(v -> config.showDayCount = v)
+                .build()
+        );
 
         return builder.build();
     }

@@ -1,6 +1,7 @@
 package moe.zapic.clockhud.mixin;
 
 import moe.zapic.clockhud.render.ClockRender;
+import moe.zapic.clockhud.render.DayCountRender;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -15,5 +16,6 @@ public class RenderMixin {
 	@Inject(at = @At("TAIL"), method = "render")
 	public void render(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
 		ClockRender.render(matrices, tickDelta, ci);
+		DayCountRender.render(matrices, tickDelta, ci);
 	}
 }

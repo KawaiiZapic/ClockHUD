@@ -7,6 +7,7 @@ import me.shedaniel.autoconfig.annotation.Config;
 @Config(name = "clock-hud")
 public class ModConfig implements ConfigData {
     public boolean isShow = true;
+    public boolean showDayCount = true;
     public int ScreenX = 4;
     public int ScreenY = 4;
     @ConfigEntry.BoundedDiscrete(min = 25, max = 200)

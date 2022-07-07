@@ -4,8 +4,10 @@
   "key.clock-hud.category": "ClockHUD",
   "text.autoconfig.clock-hud.title": "ClockHUD Config",
   "text.autoconfig.clock-hud.option.isShow": "Show clock bar",
+  "text.autoconfig.clock-hud.option.showDayCount": "Show day count tip when new day come",
   "text.autoconfig.clock-hud.option.ScreenX": "X offset",
   "text.autoconfig.clock-hud.option.ScreenY": "Y offset",
   "text.autoconfig.clock-hud.option.Scale": "HUD scale",
-  "text.autoconfig.clock-hud.option.ScalePercent": "%d%%"
+  "text.autoconfig.clock-hud.option.ScalePercent": "%d%%",
+  "text.clock-hud.new-day-tip": "Day %d"
 }
