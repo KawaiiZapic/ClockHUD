@@ -1,7 +1,7 @@
 package moe.zapic.clockhud.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import moe.zapic.clockhud.ClockHUD;
+import moe.zapic.clockhud.Main;
 import moe.zapic.clockhud.Textures;
 import moe.zapic.clockhud.Utils;
 import net.minecraft.client.gui.DrawableHelper;
@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 public class ClockRender {
     public static void render(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
-        var config = ClockHUD.config;
+        var config = Main.config;
         if (!config.isShow) { return; }
 
         RenderSystem.enableBlend();

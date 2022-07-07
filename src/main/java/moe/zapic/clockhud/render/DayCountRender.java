@@ -1,6 +1,6 @@
 package moe.zapic.clockhud.render;
 
-import moe.zapic.clockhud.ClockHUD;
+import moe.zapic.clockhud.Main;
 import moe.zapic.clockhud.Utils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -16,7 +16,7 @@ public class DayCountRender {
     public static int TextOpacity = 0;
 
     public static void render(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
-        if(!ClockHUD.config.showDayCount) return;
+        if(!Main.config.showDayCount) return;
         checkIsNewDay();
         if (!isTextRendering) return;
         var mc = MinecraftClient.getInstance();

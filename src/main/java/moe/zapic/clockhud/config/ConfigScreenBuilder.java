@@ -1,14 +1,14 @@
 package moe.zapic.clockhud.config;
 
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
-import moe.zapic.clockhud.ClockHUD;
+import moe.zapic.clockhud.Main;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.TranslatableText;
 
 public class ConfigScreenBuilder {
     public static Screen getConfigScreen() {
-        var config = ClockHUD.config;
+        var config = Main.config;
         var builder = ConfigBuilder.create()
                  .setParentScreen(MinecraftClient.getInstance().currentScreen)
                  .setTitle(new TranslatableText("text.autoconfig.clock-hud.title"));
@@ -18,6 +18,12 @@ public class ConfigScreenBuilder {
                 .startBooleanToggle(new TranslatableText("text.autoconfig.clock-hud.option.isShow"), config.isShow)
                 .setDefaultValue(true)
                 .setSaveConsumer(v -> config.isShow = v)
+                .build()
+        );
+        category.addEntry(entry
+                .startBooleanToggle(new TranslatableText("text.autoconfig.clock-hud.option.showDayCount"), config.showDayCount)
+                .setDefaultValue(true)
+                .setSaveConsumer(v -> config.showDayCount = v)
                 .build()
         );
         category.addEntry(entry
@@ -46,13 +52,6 @@ public class ConfigScreenBuilder {
                 .setSaveConsumer(v -> config.Opacity = v)
                 .build()
         );
-        category.addEntry(entry
-                .startBooleanToggle(new TranslatableText("text.autoconfig.clock-hud.option.showDayCount"), config.showDayCount)
-                .setDefaultValue(true)
-                .setSaveConsumer(v -> config.showDayCount = v)
-                .build()
-        );
-
         return builder.build();
     }
 }
