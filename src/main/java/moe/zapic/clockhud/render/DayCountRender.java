@@ -21,8 +21,11 @@ public class DayCountRender {
         if (!isTextRendering) return;
         var mc = MinecraftClient.getInstance();
         matrices.push();
+        var scale = 1 + 0.25f * (renderTime / Duration);
+        matrices.translate(-mc.getWindow().getScaledWidth() * (scale - 1) / 2, - 40 * (scale - 1) / 2,0);
+        matrices.scale(scale, scale, 1);
         setRenderStatus();
-        DrawableHelper.drawCenteredText(matrices, mc.textRenderer, new TranslatableText("text.clock-hud.new-day-tip", currentDay), mc.getWindow().getScaledWidth() / 2, 20, (TextOpacity << 24) + 0xffffff);
+        DrawableHelper.drawCenteredText(matrices, mc.textRenderer, new TranslatableText("text.clock-hud.new-day-tip", currentDay), mc.getWindow().getScaledWidth() / 2, 40, (TextOpacity << 24) + 0xffffff);
         matrices.pop();
         renderTime += tickDelta;
         if (renderTime >= Duration) {
