@@ -17,8 +17,9 @@
 ### ScreenShot
 ![day](https://s2.loli.net/2022/07/07/23J4xQTuni1WpU9.png)
 ![night](https://s2.loli.net/2022/07/07/7cVtisXrpEHTYfC.png)
+![day count](https://s2.loli.net/2022/07/07/EI7zfK2ecRkmTuF.gif)
 
 ### TODO
 - [ ] Future version support
 - [x] Config Support
-- [ ] Show day count
+- [x] Show day count
