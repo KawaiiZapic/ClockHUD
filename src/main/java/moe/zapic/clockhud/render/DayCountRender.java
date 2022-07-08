@@ -1,5 +1,6 @@
 package moe.zapic.clockhud.render;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import moe.zapic.clockhud.Main;
 import moe.zapic.clockhud.Utils;
 import net.minecraft.client.MinecraftClient;
@@ -12,8 +13,8 @@ public class DayCountRender {
     public static boolean isTextRendering = false;
     public static float renderTime = 0.0f;
     public static long currentDay = -1;
-    public static float Duration = 200.0f;
-    public static int TextOpacity = 0;
+    public static float Duration = 100.0f;
+    public static int TextOpacity = 5;
 
     public static void render(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
         if(!Main.config.showDayCount) return;
@@ -27,18 +28,17 @@ public class DayCountRender {
         setRenderStatus();
         DrawableHelper.drawCenteredText(matrices, mc.textRenderer, new TranslatableText("text.clock-hud.new-day-tip", currentDay), mc.getWindow().getScaledWidth() / 2, 30, (TextOpacity << 24) + 0xffffff);
         matrices.pop();
-        renderTime += tickDelta;
+        renderTime += mc.getLastFrameDuration();
         if (renderTime >= Duration) {
             isTextRendering = false;
             renderTime = 0.0f;
-            TextOpacity = 0;
         }
     }
 
     public static void setRenderStatus() {
         if(renderTime <= 20) {
-            TextOpacity = (int) (0xff * (renderTime / 20));
-        } else if (renderTime >= 180) {
+            TextOpacity = Math.max((int) (0xff * (renderTime / 20)), 5);
+        } else if (renderTime >= 80) {
             TextOpacity = (int) (0xff * (1 - renderTime / 20));
         }  else if (TextOpacity != 0xff) {
             TextOpacity = 0xff;
