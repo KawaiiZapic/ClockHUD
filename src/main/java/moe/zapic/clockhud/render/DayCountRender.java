@@ -1,6 +1,5 @@
 package moe.zapic.clockhud.render;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import moe.zapic.clockhud.Main;
 import moe.zapic.clockhud.Utils;
 import net.minecraft.client.MinecraftClient;
@@ -14,7 +13,7 @@ public class DayCountRender {
     public static float renderTime = 0.0f;
     public static long currentDay = -1;
     public static float Duration = 100.0f;
-    public static int TextOpacity = 5;
+    public static int TextOpacity = 4;
 
     public static void render(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
         if(!Main.config.showDayCount) return;
@@ -37,9 +36,10 @@ public class DayCountRender {
 
     public static void setRenderStatus() {
         if(renderTime <= 20) {
-            TextOpacity = Math.max((int) (0xff * (renderTime / 20)), 5);
+            // Mojang shit, will treat all opacity < 0x04 as 0xff
+            TextOpacity = (int) (0xfb * (renderTime / 20)) + 4;
         } else if (renderTime >= 80) {
-            TextOpacity = (int) (0xff * (1 - renderTime / 20));
+            TextOpacity = (int) (0xfb * (1 - renderTime / 20)) + 4;
         }  else if (TextOpacity != 0xff) {
             TextOpacity = 0xff;
         }
