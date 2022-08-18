@@ -5,7 +5,7 @@ import moe.zapic.clockhud.Utils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 public class DayCountRender {
@@ -25,7 +25,7 @@ public class DayCountRender {
         matrices.translate(-mc.getWindow().getScaledWidth() * (scale - 1) / 2, - 30 * (scale - 1) / 2,0);
         matrices.scale(scale, scale, 1);
         setRenderStatus();
-        DrawableHelper.drawCenteredText(matrices, mc.textRenderer, new TranslatableText("text.clock-hud.new-day-tip", currentDay), mc.getWindow().getScaledWidth() / 2, 30, (TextOpacity << 24) + 0xffffff);
+        DrawableHelper.drawCenteredText(matrices, mc.textRenderer, Text.translatable("text.clock-hud.new-day-tip", currentDay), mc.getWindow().getScaledWidth() / 2, 30, (TextOpacity << 24) + 0xffffff);
         matrices.pop();
         renderTime += mc.getLastFrameDuration();
         if (renderTime >= Duration) {
