@@ -35,5 +35,6 @@ public class Main implements ClientModInitializer {
 				TextureManager.getTexture(Textures.SUN).setFilter(true, true);
 			}
 		});
+		LOGGER.info("[ClockHUD] Mod initialized.");
 	}
 }

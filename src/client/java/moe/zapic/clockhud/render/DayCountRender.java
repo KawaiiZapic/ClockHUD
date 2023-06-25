@@ -3,10 +3,8 @@ package moe.zapic.clockhud.render;
 import moe.zapic.clockhud.Main;
 import moe.zapic.clockhud.Utils;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 public class DayCountRender {
     public static boolean isTextRendering = false;
@@ -15,17 +13,18 @@ public class DayCountRender {
     public static float Duration = 100.0f;
     public static int TextOpacity = 4;
 
-    public static void render(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+    public static void render(DrawContext context) {
         if(!Main.config.showDayCount) return;
         checkIsNewDay();
         if (!isTextRendering) return;
         var mc = MinecraftClient.getInstance();
+        var matrices = context.getMatrices();
         matrices.push();
         var scale = (Main.config.TipScale / 100.0f) * (1f + 0.25f * (renderTime / Duration));
         matrices.translate(-mc.getWindow().getScaledWidth() * (scale - 1) / 2, - 30 * (scale - 1) / 2,0);
         matrices.scale(scale, scale, 1);
         setRenderStatus();
-        DrawableHelper.drawCenteredText(matrices, mc.textRenderer, Text.translatable("text.clock-hud.new-day-tip", currentDay), mc.getWindow().getScaledWidth() / 2, 30, (TextOpacity << 24) + 0xffffff);
+        context.drawCenteredTextWithShadow(mc.textRenderer, Text.translatable("text.clock-hud.new-day-tip", currentDay), mc.getWindow().getScaledWidth() / 2, 30, (TextOpacity << 24) + 0xffffff);
         matrices.pop();
         renderTime += mc.getLastFrameDuration();
         if (renderTime >= Duration) {
