@@ -36,9 +36,9 @@ public class DayCountRender {
     public static void setRenderStatus() {
         if(renderTime <= 20) {
             // Mojang shit, will treat all opacity < 0x04 as 0xff
-            TextOpacity = (int) (0xfb * (renderTime / 20)) + 4;
+            TextOpacity = (int) ((0xff * (renderTime / 20)) + 4);
         } else if (renderTime >= 80) {
-            TextOpacity = (int) (0xfb * (1 - renderTime / 20)) + 4;
+            TextOpacity = (int) ((0xff * ((Duration - renderTime) / 20)) + 4);
         }  else if (TextOpacity != 0xff) {
             TextOpacity = 0xff;
         }
