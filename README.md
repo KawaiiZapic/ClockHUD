@@ -5,8 +5,8 @@
 
 ### Requirements
 1. Fabric
-2. [Cloth Config API (CurseForge)](https://www.curseforge.com/minecraft/mc-mods/cloth-config)  >= 6.2
-3. Minecraft 1.18.x (Future version is testing)
+2. [Cloth Config API (CurseForge)](https://www.curseforge.com/minecraft/mc-mods/cloth-config)  >= 7.0
+3. Minecraft 1.19.x 
 4. Java >= 17
 
 ### Key bindings
@@ -20,6 +20,6 @@
 ![day count](https://s2.loli.net/2022/07/07/EI7zfK2ecRkmTuF.gif)
 
 ### TODO
-- [ ] Future version support
+- [x] Future version support
 - [x] Config Support
 - [x] Show day count

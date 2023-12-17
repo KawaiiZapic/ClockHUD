@@ -16,10 +16,13 @@
   "license": "WTFPL",
   "icon": "assets/clock-hud/icon.png",
 
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "client": [
       "moe.zapic.clockhud.Main"
+    ],
+    "modmenu": [
+      "moe.zapic.clockhud.config.ModConfig"
     ]
   },
   "mixins": [
@@ -32,5 +35,8 @@
     "minecraft": "~1.19",
     "java": ">=17",
     "cloth-config": ">=7.0"
+  },
+  "suggests": {
+    "modmenu": ">=4.0"
   }
 }
