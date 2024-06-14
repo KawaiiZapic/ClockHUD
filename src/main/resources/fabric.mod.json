@@ -22,7 +22,7 @@
       "moe.zapic.clockhud.Main"
     ],
     "modmenu": [
-      "moe.zapic.clockhud.config.ModConfig"
+      "moe.zapic.clockhud.config.ModMenuImpl"
     ]
   },
   "mixins": [
