@@ -8,7 +8,7 @@ public class Textures {
     public static int BAR_H = 12;
     public static int DOT_S = 10;
     public static int ICON_S = 48;
-    public static Identifier BAR = new Identifier("clock-hud", "bar.png");
-    public static Identifier MOON = new Identifier("clock-hud", "moon.png");
-    public static Identifier SUN = new Identifier("clock-hud", "sun.png");
+    public static Identifier BAR = Identifier.of("clock-hud", "bar.png");
+    public static Identifier MOON = Identifier.of("clock-hud", "moon.png");
+    public static Identifier SUN = Identifier.of("clock-hud", "sun.png");
 }

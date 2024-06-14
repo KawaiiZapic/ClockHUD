@@ -5,10 +5,11 @@ import moe.zapic.clockhud.Main;
 import moe.zapic.clockhud.Textures;
 import moe.zapic.clockhud.Utils;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.util.Identifier;
 
 public class ClockRender {
-    public static void render(DrawContext context) {
+    public static void render(DrawContext context, RenderTickCounter rtc) {
         var config = Main.config;
         if (!config.isShow) { return; }
 

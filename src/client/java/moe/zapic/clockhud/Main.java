@@ -13,7 +13,6 @@ import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class Main implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("ClockHUD");
 	public static ModConfig config = null;

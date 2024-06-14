@@ -4,6 +4,7 @@ import moe.zapic.clockhud.Main;
 import moe.zapic.clockhud.Utils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.text.Text;
 
 public class DayCountRender {
@@ -13,7 +14,7 @@ public class DayCountRender {
     public static float Duration = 100.0f;
     public static int TextOpacity = 4;
 
-    public static void render(DrawContext context) {
+    public static void render(DrawContext context, RenderTickCounter rtc) {
         if(!Main.config.showDayCount) return;
         checkIsNewDay();
         if (!isTextRendering) return;
@@ -26,7 +27,7 @@ public class DayCountRender {
         setRenderStatus();
         context.drawCenteredTextWithShadow(mc.textRenderer, Text.translatable("text.clock-hud.new-day-tip", currentDay), mc.getWindow().getScaledWidth() / 2, 30, (TextOpacity << 24) + 0xffffff);
         matrices.pop();
-        renderTime += mc.getLastFrameDuration();
+        renderTime += rtc.getLastFrameDuration();
         if (renderTime >= Duration) {
             isTextRendering = false;
             renderTime = 0.0f;
