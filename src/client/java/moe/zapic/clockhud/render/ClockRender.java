@@ -5,6 +5,7 @@ import moe.zapic.clockhud.Main;
 import moe.zapic.clockhud.Textures;
 import moe.zapic.clockhud.Utils;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.util.Identifier;
 
@@ -35,6 +36,6 @@ public class ClockRender {
     }
 
     private static void drawTexture(DrawContext context, Identifier texture, int x, int y, int w, int h) {
-        context.drawTexture(texture, x, y, 0f, 0f, w, h, w, h);
+        context.drawTexture(RenderLayer::getGuiTextured, texture, x, y, 0f, 0f, w, h, w, h);
     }
 }
