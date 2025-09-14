@@ -1,6 +1,5 @@
 package moe.zapic.clockhud.render;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import moe.zapic.clockhud.Main;
 import moe.zapic.clockhud.Textures;
 import moe.zapic.clockhud.Utils;
@@ -17,9 +16,6 @@ public class ClockRender {
 
         var color = ColorHelper.fromFloats(config.Opacity / 255.0f, 1.0f,1.0f,1.0f);
 
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.disableDepthTest();
         var matrices = context.getMatrices();
         matrices.push();
 

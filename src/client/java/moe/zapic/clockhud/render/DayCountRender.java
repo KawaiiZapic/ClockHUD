@@ -26,7 +26,7 @@ public class DayCountRender {
         setRenderStatus();
         context.drawCenteredTextWithShadow(mc.textRenderer, Text.translatable("text.clock-hud.new-day-tip", currentDay), mc.getWindow().getScaledWidth() / 2, 30, (TextOpacity << 24) + 0xffffff);
         matrices.pop();
-        renderTime += rtc.getLastFrameDuration();
+        renderTime += rtc.getDynamicDeltaTicks();
         if (renderTime >= Duration) {
             isTextRendering = false;
             renderTime = 0.0f;
