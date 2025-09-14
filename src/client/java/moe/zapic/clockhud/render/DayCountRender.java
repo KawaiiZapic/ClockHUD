@@ -15,7 +15,6 @@ public class DayCountRender {
 
     public static void render(DrawContext context) {
         if(!Main.config.showDayCount) return;
-        checkIsNewDay();
         if (!isTextRendering) return;
         var mc = MinecraftClient.getInstance();
         var matrices = context.getMatrices();
@@ -44,20 +43,16 @@ public class DayCountRender {
         }
     }
 
-    public static long getDayCount() {
+    public static void checkIsNewDay() {
         var world = MinecraftClient.getInstance().world;
         assert world != null;
-        return world.getTimeOfDay() / Utils.DAY_TICKS;
-    }
-
-    public static void checkIsNewDay() {
-        var day = getDayCount();
+        var day = world.getTimeOfDay() / Utils.DAY_TICKS;
         if (currentDay == -1) {
             currentDay = day;
         }
         if (day == currentDay) return;
 
-        isTextRendering = day > currentDay;
+        isTextRendering = true;
         currentDay = day;
     }
 }

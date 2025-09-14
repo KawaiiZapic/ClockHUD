@@ -3,7 +3,9 @@ package moe.zapic.clockhud;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import moe.zapic.clockhud.config.ModConfig;
+import moe.zapic.clockhud.render.DayCountRender;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.client.MinecraftClient;
@@ -20,6 +22,9 @@ public class Main implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		KeyBind.bind();
+		ClientTickEvents.END_WORLD_TICK.register(client -> {
+			DayCountRender.checkIsNewDay();
+		});
 		AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
 		config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
