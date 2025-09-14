@@ -19,13 +19,13 @@ public class DayCountRender {
         if (!isTextRendering) return;
         var mc = MinecraftClient.getInstance();
         var matrices = context.getMatrices();
-        matrices.push();
+        matrices.pushMatrix();
         var scale = (Main.config.TipScale / 100.0f) * (1f + 0.25f * (renderTime / Duration));
-        matrices.translate(-mc.getWindow().getScaledWidth() * (scale - 1) / 2, - 30 * (scale - 1) / 2,0);
-        matrices.scale(scale, scale, 1);
+        matrices.translate(-mc.getWindow().getScaledWidth() * (scale - 1) / 2, - 30 * (scale - 1) / 2);
+        matrices.scale(scale, scale);
         setRenderStatus();
         context.drawCenteredTextWithShadow(mc.textRenderer, Text.translatable("text.clock-hud.new-day-tip", currentDay), mc.getWindow().getScaledWidth() / 2, 30, (TextOpacity << 24) + 0xffffff);
-        matrices.pop();
+        matrices.popMatrix();
         renderTime += rtc.getDynamicDeltaTicks();
         if (renderTime >= Duration) {
             isTextRendering = false;
@@ -35,10 +35,9 @@ public class DayCountRender {
 
     public static void setRenderStatus() {
         if(renderTime <= 20) {
-            // Mojang shit, will treat all opacity < 0x04 as 0xff
-            TextOpacity = (int) ((0xff * (renderTime / 20)) + 4);
+            TextOpacity = (int) (0xff * (renderTime / 20));
         } else if (renderTime >= 80) {
-            TextOpacity = (int) ((0xff * ((Duration - renderTime) / 20)) + 4);
+            TextOpacity = (int) (0xff * ((Duration - renderTime) / 20));
         } else if (TextOpacity != 0xff) {
             TextOpacity = 0xff;
         }
