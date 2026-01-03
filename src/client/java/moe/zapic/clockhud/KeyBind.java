@@ -1,6 +1,6 @@
 package moe.zapic.clockhud;
 
-import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.AutoConfigClient;
 import moe.zapic.clockhud.config.ModConfig;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -34,7 +34,7 @@ public class KeyBind {
                 Main.config.isShow = !Main.config.isShow;
             }
             while (ShowConfigKeyBind.wasPressed()) {
-                MinecraftClient.getInstance().setScreen(AutoConfig.getConfigScreen(ModConfig.class, client.currentScreen).get());
+                MinecraftClient.getInstance().setScreen(AutoConfigClient.getConfigScreen(ModConfig.class, client.currentScreen).get());
             }
         });
     }
