@@ -1,7 +1,7 @@
 {
   "key.clock-hud.toggle-clock": "显示/隐藏时钟",
   "key.clock-hud.open-config": "打开ClockHUD设置",
-  "key.clock-hud.category": "ClockHUD",
+  "key.category.clock-hud.main": "ClockHUD",
   "text.autoconfig.clock-hud.title": "ClockHUD 设置",
   "text.autoconfig.clock-hud.option.isShow": "显示时钟",
   "text.autoconfig.clock-hud.option.showDayCount": "在新的一天显示天数",

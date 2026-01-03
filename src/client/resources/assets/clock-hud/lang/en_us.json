@@ -1,7 +1,7 @@
 {
   "key.clock-hud.toggle-clock": "Toggle clock show",
   "key.clock-hud.open-config": "Open ClockHUD config",
-  "key.clock-hud.category": "ClockHUD",
+  "key.category.clock-hud.main": "ClockHUD",
   "text.autoconfig.clock-hud.title": "ClockHUD Config",
   "text.autoconfig.clock-hud.option.isShow": "Show clock bar",
   "text.autoconfig.clock-hud.option.showDayCount": "Show day count tip when new day come",
