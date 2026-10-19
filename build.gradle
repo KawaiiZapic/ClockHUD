@@ -9,7 +9,7 @@ plugins {
 group = project.maven_group
 version = project.mod_version
 
-def targets = new JsonSlurper().parse(file('versions.json'))
+def targets = new JsonSlurper().parse(file('adapters/fabric/versions.json'))
 
 java {
     sourceCompatibility = JavaVersion.VERSION_16
@@ -37,12 +37,15 @@ tasks.withType(JavaCompile).configureEach {
 
 def metadataDir = layout.buildDirectory.dir('generated/resources')
 def releaseMetadataDir = layout.buildDirectory.dir('generated/releaseResources')
+def bundleMetadataDir = layout.buildDirectory.dir('generated/fabricAdapterBundle')
 tasks.register('generateMetadata') {
-    inputs.file('versions.json')
+    inputs.file('adapters/fabric/versions.json')
     inputs.file('src/main/resources/fabric.mod.json')
+    inputs.file('adapters/fabric/resources/fabric.mod.json')
     inputs.property('version', project.version)
     outputs.dir(metadataDir)
     outputs.dir(releaseMetadataDir)
+    outputs.dir(bundleMetadataDir)
     doLast {
         def template = file('src/main/resources/fabric.mod.json').getText('UTF-8')
                 .replace('${version}', project.version.toString())
@@ -51,10 +54,18 @@ tasks.register('generateMetadata') {
         def destination = metadataDir.get().file('fabric.mod.json').asFile
         destination.parentFile.mkdirs()
         destination.text = JsonOutput.prettyPrint(JsonOutput.toJson(metadata)) + '\n'
-        metadata.jars = targets.collect { [file: "META-INF/jars/adapter-${it.minecraft}.jar"] }
+        metadata.jars = [[file: 'META-INF/jars/fabric-adapters.jar']]
+        metadata.depends['clock-hud-fabric-adapters'] = "=${project.version}"
         def releaseDestination = releaseMetadataDir.get().file('fabric.mod.json').asFile
         releaseDestination.parentFile.mkdirs()
         releaseDestination.text = JsonOutput.prettyPrint(JsonOutput.toJson(metadata)) + '\n'
+        def bundleTemplate = file('adapters/fabric/resources/fabric.mod.json').getText('UTF-8')
+                .replace('${version}', project.version.toString())
+        def bundleMetadata = new JsonSlurper().parseText(bundleTemplate)
+        bundleMetadata.jars = targets.collect { [file: "META-INF/jars/adapter-${it.minecraft}.jar"] }
+        def bundleDestination = bundleMetadataDir.get().file('fabric.mod.json').asFile
+        bundleDestination.parentFile.mkdirs()
+        bundleDestination.text = JsonOutput.prettyPrint(JsonOutput.toJson(bundleMetadata)) + '\n'
     }
 }
 
@@ -71,6 +82,24 @@ jar {
     destinationDirectory = layout.buildDirectory.dir('intermediates')
 }
 
+// Both inner layers are stored; the outer JAR compresses all adapters as one entry.
+def fabricAdapterBundle = tasks.register('fabricAdapterBundle', Jar) {
+    archiveFileName = 'fabric-adapters.jar'
+    destinationDirectory = layout.buildDirectory.dir('intermediates')
+    entryCompression = ZipEntryCompression.STORED
+    dependsOn tasks.named('generateMetadata')
+    from bundleMetadataDir
+    duplicatesStrategy = DuplicatesStrategy.FAIL
+    targets.each { target ->
+        def adapter = project(":fabric-${target.minecraft}")
+        dependsOn "${adapter.path}:storedJar"
+        from({ adapter.tasks.named('storedJar').get().archiveFile }) {
+            into 'META-INF/jars'
+            rename { "adapter-${target.minecraft}.jar" }
+        }
+    }
+}
+
 tasks.register('universalJar', Jar) {
     archiveBaseName = project.archives_base_name
     from(sourceSets.main.output) {
@@ -80,13 +109,8 @@ tasks.register('universalJar', Jar) {
     from releaseMetadataDir
     from('LICENSE')
     duplicatesStrategy = DuplicatesStrategy.FAIL
-    targets.each { target ->
-        def adapter = project(":mc-${target.minecraft}")
-        dependsOn "${adapter.path}:remapJar"
-        from({ adapter.tasks.named('remapJar').get().archiveFile }) {
-            into 'META-INF/jars'
-            rename { "adapter-${target.minecraft}.jar" }
-        }
+    from(fabricAdapterBundle) {
+        into 'META-INF/jars'
     }
 }
 

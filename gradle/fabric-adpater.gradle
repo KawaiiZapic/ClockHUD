@@ -1,0 +1,80 @@
+import groovy.json.JsonSlurper
+
+apply plugin: 'fabric-loom'
+
+def target = new JsonSlurper().parse(rootProject.file('adapters/fabric/versions.json'))
+        .find { "fabric-${it.minecraft}" == project.name }
+
+group = rootProject.group
+version = rootProject.version
+base.archivesName = "clock-hud-adapter-${target.minecraft}"
+
+// One source copy, compiled with each adapter's own native types and mappings.
+sourceSets.main.java.srcDir(rootProject.file('adapters/fabric/shared/java'))
+sourceSets.main.resources.srcDir(rootProject.file('adapters/fabric/shared/resources'))
+
+java {
+    sourceCompatibility = JavaVersion.toVersion(target.java)
+    targetCompatibility = JavaVersion.toVersion(target.java)
+}
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://maven.shedaniel.me/' }
+    maven { url = 'https://api.modrinth.com/maven' }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${target.minecraft}"
+    mappings "net.fabricmc:yarn:${target.yarn}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.loader_version}"
+    modImplementation fabricApi.module('fabric-lifecycle-events-v1', target.fabric)
+    modImplementation fabricApi.module('fabric-key-binding-api-v1', target.fabric)
+    modRuntimeOnly(fabricApi.module("fabric-resource-loader-${target.fabric_resource_loader}", target.fabric)) {
+        exclude group: 'net.fabricmc', module: 'fabric-loader'
+    }
+    modImplementation("me.shedaniel.cloth:cloth-config-fabric:${target.cloth}") {
+        exclude group: 'net.fabricmc.fabric-api'
+    }
+    modCompileOnly "maven.modrinth:modmenu:${target.modmenu}"
+    implementation project(':')
+}
+
+loom {
+    mixin {
+        useLegacyMixinAp = true
+        defaultRefmapName = 'clock-hud-adapter-refmap.json'
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = target.java
+    options.encoding = 'UTF-8'
+}
+
+processResources {
+    def metadataProperties = [
+            version: project.version.toString(),
+            loader_version: rootProject.loader_version,
+            minecraft: target.minecraft,
+            minecraft_range: target.minecraft_range,
+            java: target.java,
+            fabric_resource_loader: target.fabric_resource_loader,
+            cloth_mod_id: target.use_old_cloth_config_mod_id == true ? 'cloth-config2' : 'cloth-config'
+    ]
+    inputs.properties(metadataProperties)
+    filesMatching(['fabric.mod.json', 'clock-hud-adapter.mixins.json']) {
+        expand(metadataProperties)
+    }
+}
+
+// Repack after remapping so Loom cannot reintroduce per-file compression.
+tasks.register('storedJar', Zip) {
+    dependsOn tasks.named('remapJar')
+    archiveExtension = 'jar'
+    archiveClassifier = 'stored'
+    destinationDirectory = layout.buildDirectory.dir('intermediates')
+    entryCompression = ZipEntryCompression.STORED
+    duplicatesStrategy = DuplicatesStrategy.FAIL
+    from({ zipTree(tasks.named('remapJar').get().archiveFile.get().asFile) })
+}

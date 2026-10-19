@@ -17,8 +17,9 @@ follows `mod_version` in `gradle.properties`. The build compiles and remaps all
 15 version adapters, compiles the shared main package, and assembles the release.
 There are currently no automated tests.
 
-The outer release contains the shared implementation, assets, and nested adapter
-JARs. Each adapter contains a compiled copy of the shared Mod Menu bridge source.
+The outer release contains the shared implementation, assets, and a nested
+`fabric-adapters.jar` container holding all 15 adapter JARs. Each adapter contains
+a compiled copy of the shared Mod Menu bridge source.
 Distribute the universal JAR, not the intermediate shared or adapter artifacts.
 
 ## Development clients
@@ -26,11 +27,11 @@ Distribute the universal JAR, not the intermediate shared or adapter artifacts.
 Run a specific Minecraft version using its module name:
 
 ```sh
-./gradlew --configure-on-demand :mc-1.21.11:runClient
+./gradlew --configure-on-demand :fabric-1.21.11:runClient
 ```
 
-For example, use `:mc-1.18.2:runClient` for Minecraft 1.18.2.
-`versions.json` lists the available build targets and their dependencies.
+For example, use `:fabric-1.18.2:runClient` for Minecraft 1.18.2.
+`adapters/fabric/versions.json` lists the available build targets and their dependencies.
 
 Development clients load the shared main package and the selected adapter.
 Mod Menu itself remains an optional dependency; its
@@ -71,10 +72,11 @@ supported version without backports.
 - `config/ModConfig` defines the configuration schema and Cloth annotations.
 - `src/main/resources/assets` contains the shared textures and translations.
 
-Each `adapters/<minecraft>/src/main/java/` directory contains ordinary Java
-source compiled directly against that Minecraft version. Its
-`src/main/resources/` directory contains Fabric and Mixin metadata. Edit these
-files directly; there is no Java preprocessor or generated adapter source.
+Each `adapters/fabric/<minecraft>/src/main/java/` directory contains ordinary Java
+source compiled directly against that Minecraft version. Fabric and Mixin
+metadata templates live in `adapters/fabric/shared/resources/`. Resource
+processing expands each target's explicitly declared configuration; there is
+no Java preprocessor or generated adapter source.
 `MinecraftPlatform` is registered under the custom `clock-hud:platform`
 entrypoint. `HudBridge` forwards native HUD render calls to `Main.render()`.
 
@@ -83,14 +85,39 @@ screens, and execute primitive drawing calls. Their repeated API wrappers are
 intentional. Feature decisions, menu flow, layout, and rendering strategies
 belong in the shared code, including strategies needed by only some versions.
 
-`gradle/adapter.gradle` supplies common dependency, compilation, and resource
-version expansion settings. `versions.json` pins the Minecraft, Yarn, Fabric
+`gradle/fabric-adpater.gradle` supplies common dependency, compilation, and resource
+version expansion settings. `adapters/fabric/versions.json` pins the Minecraft, Yarn, Fabric
 API, Cloth Config, Mod Menu, and Java versions for each build target.
+It also declares `minecraft_range` (the runtime compatibility range) and
+the optional `use_old_cloth_config_mod_id` flag (`true` uses `cloth-config2`;
+omitted or `false` uses `cloth-config`). The existing `java`
+and `fabric_resource_loader` fields also supply metadata values. The latter
+declares the resource loader module suffix, such as `v0` or `v1`. The build substitutes
+these values into the templates without inferring them from Minecraft versions.
+
+## Loader organization
+
+Fabric projects use `:fabric-<minecraft>` Gradle paths and live under
+`adapters/fabric/<minecraft>/`. The Fabric version matrix is
+`adapters/fabric/versions.json`; the outer metadata template is
+`src/main/resources/fabric.mod.json`. The adapter container metadata
+template is `adapters/fabric/resources/fabric.mod.json`; the build fills
+its version and nested JAR list. The shared Mod Menu bridge lives
+under `adapters/fabric/shared/java/` and is compiled once per Fabric adapter.
+These directories contain only the current Fabric implementation; no NeoForge
+projects or dependencies are configured.
+
+The root build and universal release still target Fabric. In particular,
+`Main` combines shared behavior with Fabric initialization and platform
+discovery, and configuration uses Cloth Config's AutoConfig API. Supporting
+another loader will require reviewing those boundaries, its configuration UI,
+and its adapter discovery and packaging mechanism. The current directory
+organization does not make those APIs loader-independent.
 
 ## Mod Menu integration
 
-`src/bridge/java/.../platform/ModMenuImpl.java` is the only source copy of the
-Mod Menu bridge. `gradle/adapter.gradle` adds that source directory to every
+`adapters/fabric/shared/java/.../platform/ModMenuImpl.java` is the only source copy of the
+Mod Menu bridge. `gradle/fabric-adpater.gradle` adds that source directory to every
 adapter's compilation. Each compiled copy uses its own Minecraft types and
 mappings, without relying on `Screen` having the same intermediary name across
 versions. It forwards to `Main.configScreen()`, which
@@ -103,8 +130,19 @@ The version proxies retain the native Cloth Config screen construction call.
 
 ## Universal loading
 
-The root `build.gradle` generates the release metadata and embeds the remapped
-adapters under `META-INF/jars/`. All candidates have the same
+The root `build.gradle` generates release and container metadata. The outer
+release embeds `META-INF/jars/fabric-adapters.jar`, a metadata-only Fabric mod
+with ID `clock-hud-fabric-adapters`. Its own `jars` list declares the remapped
+adapters under its `META-INF/jars/` directory. Fabric Loader discovers these
+nested mods recursively.
+
+Each adapter's `storedJar` task repacks the final `remapJar` output with STORE
+entries. The container also uses STORE for all entries. Only the outer JAR
+compresses the container, allowing DEFLATE to reuse repeated content across
+adapter boundaries. Intermediate artifacts remain under `build/intermediates/`
+in their respective projects; distribute only the outer release.
+
+All adapter candidates have the same
 `clock-hud-adapter` mod ID and declare different Minecraft ranges. The outer
 mod requires that ID, so Fabric Loader selects the matching candidate before
 loading its entrypoint or Mixin. Other candidates remain unloaded.

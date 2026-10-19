@@ -18,11 +18,12 @@ not an existing implementation recovered from an older branch.
 - `src/main/java/.../Textures`: shared texture identifier cache with a native identifier factory.
 - `src/main/java/.../config`: the existing configuration schema and Cloth annotations.
 - `src/main/resources/assets`: one copy of all textures and translations.
-- `src/bridge/java/.../platform/ModMenuImpl`: one source copy, compiled separately by each adapter.
-- `adapters/<minecraft>/src/main/java`: ordinary Java adapters for that Minecraft version.
-- `adapters/<minecraft>/src/main/resources`: Fabric metadata and Mixin configuration.
-- `gradle/adapter.gradle`: shared Gradle dependency and compilation settings.
-- `versions.json`: build targets and dependency versions.
+- `adapters/fabric/shared/java/.../platform/ModMenuImpl`: one source copy, compiled separately by each adapter.
+- `adapters/fabric/<minecraft>/src/main/java`: ordinary Java adapters for that Minecraft version.
+- `adapters/fabric/shared/resources`: common Fabric metadata and Mixin templates, expanded per target.
+- `src/main/resources/fabric.mod.json`: outer Fabric metadata template.
+- `gradle/fabric-adpater.gradle`: shared Gradle dependency and compilation settings.
+- `adapters/fabric/versions.json`: build targets and dependency versions.
 
 All behavior belongs in the main package, including behavior needed by only some
 versions. Minecraft API calls belong in the relevant version directory. Adapters
@@ -78,8 +79,11 @@ flatten their classes into the outer JAR or list all adapters as root mods.
 | 1.21.10 | 1.21.9 - 1.21.10 | 21 |
 | 1.21.11 | 1.21.11 | 21 |
 
-The table is descriptive; each adapter's `fabric.mod.json` declares its supported
-Minecraft range. `versions.json` pins build dependencies. Each adapter requires
+The table is descriptive; `minecraft_range` in `adapters/fabric/versions.json`
+declares each adapter's supported Minecraft range and is expanded into its
+`fabric.mod.json`. The same configuration pins build dependencies and declares
+the legacy Cloth Config dependency ID via the optional
+`use_old_cloth_config_mod_id` flag. Each adapter requires
 Cloth Config with a `*` version range, leaving game compatibility to Cloth
 Config's own metadata. The 1.17 adapter uses its historical `cloth-config2`
 mod ID; the others use `cloth-config`. Players install the matching Fabric API,

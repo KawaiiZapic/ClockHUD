@@ -11,8 +11,8 @@ pluginManagement {
 
 rootProject.name = 'clock-hud'
 
-def targets = new groovy.json.JsonSlurper().parse(file('versions.json'))
+def targets = new groovy.json.JsonSlurper().parse(file('adapters/fabric/versions.json'))
 targets.each { target ->
-    include "mc-${target.minecraft}"
-    project(":mc-${target.minecraft}").projectDir = file("adapters/${target.minecraft}")
+    include "fabric-${target.minecraft}"
+    project(":fabric-${target.minecraft}").projectDir = file("adapters/fabric/${target.minecraft}")
 }

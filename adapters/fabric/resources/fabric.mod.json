@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "clock-hud-fabric-adapters",
+  "version": "${version}",
+  "name": "Clock HUD Fabric Adapters",
+  "license": "WTFPL",
+  "environment": "client",
+  "jars": [],
+  "custom": {
+    "modmenu": {
+      "parent": "clock-hud",
+      "badges": ["library"]
+    }
+  }
+}
