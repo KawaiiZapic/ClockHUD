@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "moe.zapic.clockhud.platform.mixin",
+  "refmap": "clock-hud-adapter-refmap.json",
+  "compatibilityLevel": "JAVA_16",
+  "client": [
+    "RenderMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

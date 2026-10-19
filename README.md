@@ -1,13 +1,12 @@
 # ClockHUD
 ### A mod show a clock bar in your game
 
-*This is a reload version for [ClockHUD](https://github.com/samvbeckmann/ClockHUD), but work with fabric in high version and fully rewrite code.*
+*This is a rewritten version for [ClockHUD](https://github.com/samvbeckmann/ClockHUD), but work with fabric in high version and fully rewrote code.*
 
 ### Requirements
 1. Fabric
-2. [Cloth Config API (CurseForge)](https://www.curseforge.com/minecraft/mc-mods/cloth-config)  >= 11.0
-3. Minecraft 1.20.x
-4. Java >= 17
+2. [Cloth Config API (CurseForge)](https://www.curseforge.com/minecraft/mc-mods/cloth-config)
+3. Minecraft 1.17+
 
 ### Key bindings
 

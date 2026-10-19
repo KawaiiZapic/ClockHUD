@@ -1,101 +1,93 @@
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
 plugins {
-	id 'fabric-loom' version '1.14-SNAPSHOT'
-	id 'maven-publish'
+    id 'java-library'
+    id 'fabric-loom' version '1.14.10' apply false
 }
 
-version = project.mod_version
 group = project.maven_group
+version = project.mod_version
 
-base {
-	archivesName = "${archives_base_name}_${minecraft_version}"
+def targets = new JsonSlurper().parse(file('versions.json'))
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_16
+    targetCompatibility = JavaVersion.VERSION_16
 }
 
 repositories {
-	// Add repositories to retrieve artifacts from in here.
-	// You should only use this when depending on other mods because
-	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-	// for more information about repositories.
-	maven { url "https://maven.shedaniel.me/" }
-	maven { url = "https://maven.terraformersmc.com" }
-}
-
-loom {
-    splitEnvironmentSourceSets()
-
-	mods {
-		"clockhud" {
-			sourceSet sourceSets.main
-		}
-	}
-
+    mavenCentral()
+    maven { url = 'https://maven.fabricmc.net/' }
+    maven { url = 'https://maven.shedaniel.me/' }
 }
 
 dependencies {
-	// To change the versions see the gradle.properties file
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	
-	// Uncomment the following line to enable the deprecated Fabric API modules. 
-	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
-
-	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
-	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
-		exclude(group: "net.fabricmc.fabric-api")
-	}
-
-	modApi "com.terraformersmc:modmenu:${project.mod_menu_version}"
-}
-
-processResources {
-	inputs.property "version", project.version
-
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
+    // Shared configuration uses AutoConfig's Minecraft-independent API.
+    compileOnly('me.shedaniel.cloth:cloth-config-fabric:5.3.63') { transitive = false }
+    compileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
+    compileOnly 'com.google.code.gson:gson:2.11.0'
+    compileOnly 'org.slf4j:slf4j-api:1.7.36'
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 21
+    options.release = 16
+    options.encoding = 'UTF-8'
 }
 
-java {
-	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-	// if it is present.
-	// If you remove this line, sources will not be generated.
-	// withSourcesJar()
-
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
+def metadataDir = layout.buildDirectory.dir('generated/resources')
+def releaseMetadataDir = layout.buildDirectory.dir('generated/releaseResources')
+tasks.register('generateMetadata') {
+    inputs.file('versions.json')
+    inputs.file('src/main/resources/fabric.mod.json')
+    inputs.property('version', project.version)
+    outputs.dir(metadataDir)
+    outputs.dir(releaseMetadataDir)
+    doLast {
+        def template = file('src/main/resources/fabric.mod.json').getText('UTF-8')
+                .replace('${version}', project.version.toString())
+        def metadata = new JsonSlurper().parseText(template)
+        metadata.jars = []
+        def destination = metadataDir.get().file('fabric.mod.json').asFile
+        destination.parentFile.mkdirs()
+        destination.text = JsonOutput.prettyPrint(JsonOutput.toJson(metadata)) + '\n'
+        metadata.jars = targets.collect { [file: "META-INF/jars/adapter-${it.minecraft}.jar"] }
+        def releaseDestination = releaseMetadataDir.get().file('fabric.mod.json').asFile
+        releaseDestination.parentFile.mkdirs()
+        releaseDestination.text = JsonOutput.prettyPrint(JsonOutput.toJson(metadata)) + '\n'
+    }
 }
 
+sourceSets.main.resources.exclude 'fabric.mod.json'
+processResources {
+    dependsOn tasks.named('generateMetadata')
+    from(metadataDir)
+}
+
+// Keep the compile dependency separate from the universal release to avoid
+// a cycle between adapter compilation and assembly.
 jar {
-	from("LICENSE") {
-		rename { "${it}_${project.base.archivesName}"}
-	}
-
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
+    archiveClassifier = 'core'
+    destinationDirectory = layout.buildDirectory.dir('intermediates')
 }
 
-// configure the maven publication
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
-		}
-	}
-
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
-	}
+tasks.register('universalJar', Jar) {
+    archiveBaseName = project.archives_base_name
+    from(sourceSets.main.output) {
+        exclude 'fabric.mod.json'
+    }
+    dependsOn tasks.named('generateMetadata')
+    from releaseMetadataDir
+    from('LICENSE')
+    duplicatesStrategy = DuplicatesStrategy.FAIL
+    targets.each { target ->
+        def adapter = project(":mc-${target.minecraft}")
+        dependsOn "${adapter.path}:remapJar"
+        from({ adapter.tasks.named('remapJar').get().archiveFile }) {
+            into 'META-INF/jars'
+            rename { "adapter-${target.minecraft}.jar" }
+        }
+    }
 }
+
+assemble.dependsOn tasks.named('universalJar')

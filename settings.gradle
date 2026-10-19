@@ -8,3 +8,11 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
+
+rootProject.name = 'clock-hud'
+
+def targets = new groovy.json.JsonSlurper().parse(file('versions.json'))
+targets.each { target ->
+    include "mc-${target.minecraft}"
+    project(":mc-${target.minecraft}").projectDir = file("adapters/${target.minecraft}")
+}
