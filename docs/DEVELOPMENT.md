@@ -99,7 +99,7 @@ screens, and execute primitive drawing calls. Their repeated API wrappers are
 intentional. Feature decisions, menu flow, layout, and rendering strategies
 belong in the shared code, including strategies needed by only some versions.
 
-`gradle/fabric-adpater.gradle` supplies common dependency, compilation, and resource
+`gradle/fabric-adapter.gradle` supplies common dependency, compilation, and resource
 version expansion settings. `adapters/fabric/versions.json` pins the Minecraft, Yarn, Fabric
 API, Cloth Config, Mod Menu, and Java versions for each build target.
 It also declares `minecraft_range` (the runtime compatibility range) and
@@ -131,7 +131,7 @@ organization does not make those APIs loader-independent.
 ## Mod Menu integration
 
 `adapters/fabric/shared/java/.../platform/ModMenuImpl.java` is the only source copy of the
-Mod Menu bridge. `gradle/fabric-adpater.gradle` adds that source directory to every
+Mod Menu bridge. `gradle/fabric-adapter.gradle` adds that source directory to every
 adapter's compilation. Each compiled copy uses its own Minecraft types and
 mappings, without relying on `Screen` having the same intermediary name across
 versions. It forwards to `Main.configScreen()`, which

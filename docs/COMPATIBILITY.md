@@ -22,7 +22,7 @@ not an existing implementation recovered from an older branch.
 - `adapters/fabric/<minecraft>/src/main/java`: ordinary Java adapters for that Minecraft version.
 - `adapters/fabric/shared/resources`: common Fabric metadata and Mixin templates, expanded per target.
 - `src/main/resources/fabric.mod.json`: outer Fabric metadata template.
-- `gradle/fabric-adpater.gradle`: shared Gradle dependency and compilation settings.
+- `gradle/fabric-adapter.gradle`: shared Gradle dependency and compilation settings.
 - `adapters/fabric/versions.json`: build targets and dependency versions.
 
 All behavior belongs in the main package, including behavior needed by only some
