@@ -33,6 +33,20 @@ Run a specific Minecraft version using its module name:
 For example, use `:fabric-1.18.2:runClient` for Minecraft 1.18.2.
 `adapters/fabric/versions.json` lists the available build targets and their dependencies.
 
+Development clients skip the external Minecraft asset download by default,
+including sounds. Game JARs, libraries, and mod dependencies are still resolved
+normally, and existing cached assets remain available. Missing assets can produce
+resource-index errors and sound warnings in the log; Minecraft 1.19.2 was able
+to launch in this mode for ClockHUD checks.
+
+To download the complete asset bundle, opt in when launching:
+
+```sh
+./gradlew --configure-on-demand :fabric-1.21.11:runClient -PdownloadGameAssets=true
+```
+
+The same flag is required when running a module's `downloadAssets` task directly.
+
 Development clients load the shared main package and the selected adapter.
 Mod Menu itself remains an optional dependency; its
 `modCompileOnly` declaration does not install it into a development client.

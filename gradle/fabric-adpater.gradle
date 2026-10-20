@@ -47,6 +47,13 @@ loom {
     }
 }
 
+// HUD development does not require the external vanilla resource bundle.
+tasks.matching { it.name == 'downloadAssets' }.configureEach {
+    enabled = providers.gradleProperty('downloadGameAssets')
+            .map { it.toBoolean() }
+            .getOrElse(false)
+}
+
 tasks.withType(JavaCompile).configureEach {
     options.release = target.java
     options.encoding = 'UTF-8'
