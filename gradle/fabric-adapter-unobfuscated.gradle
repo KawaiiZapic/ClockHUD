@@ -1,0 +1,85 @@
+import groovy.json.JsonSlurper
+
+apply plugin: 'net.fabricmc.fabric-loom'
+
+def target = new JsonSlurper().parse(rootProject.file('adapters/fabric/versions.json'))
+        .find { "fabric-${it.minecraft}" == project.name }
+
+def keyBindingModule = 'fabric-key-mapping-api-v1'
+
+group = rootProject.group
+version = rootProject.version
+base.archivesName = "clock-hud-adapter-${target.minecraft}"
+
+sourceSets.main.java.srcDir(rootProject.file('adapters/fabric/shared/java'))
+sourceSets.main.resources.srcDir(rootProject.file('adapters/fabric/shared/resources'))
+
+java {
+    sourceCompatibility = JavaVersion.toVersion(target.java)
+    targetCompatibility = JavaVersion.toVersion(target.java)
+}
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://maven.shedaniel.me/' }
+    maven { url = 'https://api.modrinth.com/maven' }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${target.minecraft}"
+    implementation "net.fabricmc:fabric-loader:${rootProject.loader_version}"
+    implementation fabricApi.module('fabric-lifecycle-events-v1', target.fabric)
+    implementation fabricApi.module(keyBindingModule, target.fabric)
+    runtimeOnly(fabricApi.module("fabric-resource-loader-${target.fabric_resource_loader}", target.fabric)) {
+        exclude group: 'net.fabricmc', module: 'fabric-loader'
+    }
+    implementation("me.shedaniel.cloth:cloth-config-fabric:${target.cloth}") {
+        exclude group: 'net.fabricmc.fabric-api'
+    }
+    compileOnly "maven.modrinth:modmenu:${target.modmenu}"
+    implementation project(':')
+}
+
+// HUD development does not require the external vanilla resource bundle.
+tasks.matching { it.name == 'downloadAssets' }.configureEach {
+    enabled = providers.gradleProperty('downloadGameAssets')
+            .map { it.toBoolean() }
+            .getOrElse(false)
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = target.java
+    options.encoding = 'UTF-8'
+}
+
+processResources {
+    def metadataProperties = [
+            version: project.version.toString(),
+            loader_version: rootProject.loader_version,
+            minecraft: target.minecraft,
+            minecraft_range: target.minecraft_range,
+            java: target.java,
+            key_binding_mod_id: keyBindingModule,
+            fabric_resource_loader: target.fabric_resource_loader,
+            cloth_mod_id: target.use_old_cloth_config_mod_id == true ? 'cloth-config2' : 'cloth-config'
+    ]
+    inputs.properties(metadataProperties)
+    filesMatching(['fabric.mod.json', 'clock-hud-adapter.mixins.json']) {
+        expand(metadataProperties)
+    }
+    // Keep the metadata templates shared; native names do not need a refmap.
+    filesMatching('clock-hud-adapter.mixins.json') {
+        filter { line -> line.trim().startsWith('"refmap":') ? null : line }
+    }
+}
+
+// There is no remapping step for unobfuscated Minecraft.
+tasks.register('storedJar', Zip) {
+    dependsOn tasks.named('jar')
+    archiveExtension = 'jar'
+    archiveClassifier = 'stored'
+    destinationDirectory = layout.buildDirectory.dir('intermediates')
+    entryCompression = ZipEntryCompression.STORED
+    duplicatesStrategy = DuplicatesStrategy.FAIL
+    from({ zipTree(tasks.named('jar').get().archiveFile.get().asFile) })
+}

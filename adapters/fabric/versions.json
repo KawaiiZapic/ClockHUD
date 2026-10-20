@@ -149,5 +149,23 @@
     "modmenu": "17.0.0-beta.1",
     "fabric_resource_loader": "v1",
     "minecraft_range": "=1.21.11"
+  },
+  {
+    "minecraft": "26.1",
+    "java": 25,
+    "fabric": "0.145.1+26.1",
+    "cloth": "26.1.154",
+    "modmenu": "18.0.2",
+    "fabric_resource_loader": "v1",
+    "minecraft_range": ">=26.1 <26.2"
+  },
+  {
+    "minecraft": "26.3",
+    "java": 25,
+    "fabric": "0.164.0+26.3",
+    "cloth": "26.3.159",
+    "modmenu": "21.0.0",
+    "fabric_resource_loader": "v1",
+    "minecraft_range": ">=26.2 <26.4"
   }
 ]

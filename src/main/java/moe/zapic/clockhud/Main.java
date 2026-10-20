@@ -28,9 +28,10 @@ public final class Main implements ClientModInitializer {
     public void onInitializeClient() {
         var platforms = FabricLoader.getInstance()
                 .getEntrypoints("clock-hud:platform", ClientPlatform.class);
-        if (platforms.size() != 1) {
+        if (platforms.isEmpty()) {
             throw new IllegalStateException(
-                    "ClockHUD requires exactly one platform provider, found " + platforms.size());
+                    "This version of ClockHUD is not compatible with your Minecraft version. "
+                            + "Please install a ClockHUD release that supports your Minecraft version.");
         }
         platform = platforms.get(0);
         AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
@@ -43,7 +44,7 @@ public final class Main implements ClientModInitializer {
         settingsKey = category.registerKey("key.clock-hud.open-config", KEY_HOME);
         platform.onClientTick(this::tick);
         instance = this;
-        LoggerFactory.getLogger("ClockHUD").info("[ClockHUD] Universal mod initialized.");
+        LoggerFactory.getLogger("ClockHUD").info("[ClockHUD] Mod initialized.");
     }
 
     private void tick() {

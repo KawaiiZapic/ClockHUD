@@ -1,9 +1,11 @@
 import groovy.json.JsonSlurper
 
-apply plugin: 'fabric-loom'
+apply plugin: 'net.fabricmc.fabric-loom-remap'
 
 def target = new JsonSlurper().parse(rootProject.file('adapters/fabric/versions.json'))
         .find { "fabric-${it.minecraft}" == project.name }
+
+def keyBindingModule = 'fabric-key-binding-api-v1'
 
 group = rootProject.group
 version = rootProject.version
@@ -29,7 +31,7 @@ dependencies {
     mappings "net.fabricmc:yarn:${target.yarn}:v2"
     modImplementation "net.fabricmc:fabric-loader:${rootProject.loader_version}"
     modImplementation fabricApi.module('fabric-lifecycle-events-v1', target.fabric)
-    modImplementation fabricApi.module('fabric-key-binding-api-v1', target.fabric)
+    modImplementation fabricApi.module(keyBindingModule, target.fabric)
     modRuntimeOnly(fabricApi.module("fabric-resource-loader-${target.fabric_resource_loader}", target.fabric)) {
         exclude group: 'net.fabricmc', module: 'fabric-loader'
     }
@@ -66,6 +68,7 @@ processResources {
             minecraft: target.minecraft,
             minecraft_range: target.minecraft_range,
             java: target.java,
+            key_binding_mod_id: keyBindingModule,
             fabric_resource_loader: target.fabric_resource_loader,
             cloth_mod_id: target.use_old_cloth_config_mod_id == true ? 'cloth-config2' : 'cloth-config'
     ]

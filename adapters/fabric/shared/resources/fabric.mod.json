@@ -27,7 +27,7 @@
     "java": ">=${java}",
     "fabricloader": ">=${loader_version}",
     "fabric-lifecycle-events-v1": "*",
-    "fabric-key-binding-api-v1": "*",
+    "${key_binding_mod_id}": "*",
     "fabric-resource-loader-${fabric_resource_loader}": "*",
     "${cloth_mod_id}": "*"
   }
